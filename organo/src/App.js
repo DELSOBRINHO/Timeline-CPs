@@ -1,13 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
+import banner from './componentes/banner/banner';
+
 
 function App() {
   return (
     <div className="App">
+      <banner /> 
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Meu primeiro app com React.
         </p>
         <a
           className="App-link"

@@ -1,0 +1,11 @@
+Comissao_ID,Comissao_Nome,Comissao_Descricao,Vigencia_Inicio,Vigencia_Fim,Resolucao_Nome,Resolucao_Numero,Resolucao_Data,Resolucao_Alteracao_Nome,Resolucao_Alteracao_Descricao
+1,"Comissão de Constituição e Justiça","Analisa a constitucionalidade dos projetos",33000,,"Resolução 01/1991","01","01/01/1991","Resolução 10/2000","Alterou a composição"
+2,"Comissão de Economia Orçamento e Finanças","Analisa o orçamento e finanças",33000,,"Resolução 01/1991","01","01/01/1991",,
+3,"Comissão de Assuntos Sociais","Trata de temas sociais",33000,36500,"Resolução 01/1991","01","01/01/1991","Resolução 15/2005","Alterou o nome"
+4,"Comissão de Defesa do Consumidor","Defende os direitos dos consumidores",35000,,"Resolução 05/2000","05","15/03/2000",,
+5,"Comissão de Defesa dos Direitos Humanos","Defende os direitos humanos",37000,,"Resolução 08/2010","08","10/06/2010",,
+6,"Comissão de Educação e Cultura","Trata de temas educacionais e culturais",33000,,"Resolução 01/1991","01","01/01/1991","Resolução 20/2015","Ampliou as atribuições"
+7,"Comissão de Meio Ambiente","Trata de questões ambientais",36000,,"Resolução 07/2005","07","20/05/2005",,
+8,"Comissão de Segurança","Trata de segurança pública",37500,,"Resolução 12/2012","12","15/08/2012",,
+9,"Comissão de Transporte e Mobilidade","Analisa questões de transporte",38000,,"Resolução 15/2015","15","10/03/2015",,
+10,"Comissão de Saúde","Trata de questões de saúde pública",33000,,"Resolução 01/1991","01","01/01/1991","Resolução 18/2018","Alterou a composição"

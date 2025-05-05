@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo das Comissões Permanentes da CLDF</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Cores da CLDF */
+    :root {
+      --blue-primary: #004a8f;
+      --blue-dark: #003366;
+      --blue-light: #0077cc;
+      --gold: #c8a45c;
+      --red: #9e1b32;
+      --gray: #58595b;
+      --gray-light: #f2f2f2;
+    }
+    
+    body {
+      background-color: var(--gray-light);
+      font-family: Arial, sans-serif;
+    }
+    
+    /* Estilos do cabeçalho */
+    header {
+      background-color: var(--blue-primary);
+    }
+    
+    /* Estilos do menu */
+    .menu-button {
+      cursor: pointer;
+    }
+    
+    .menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 0.5rem;
+      z-index: 10;
+    }
+    
+    .menu a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--blue-dark);
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+    
+    .menu a:hover {
+      background-color: var(--gray-light);
+    }
+    
+    /* Estilos das comissões */
+    .commission-card {
+      background-color: white;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+    
+    .commission-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .commission-header {
+      color: white;
+      padding: 1rem;
+    }
+    
+    .commission-body {
+      padding: 1rem;
+    }
+    
+    .commission-footer {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .completed-badge {
+      background-color: var(--gold);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    
+    /* Estilos da linha do tempo */
+    .timeline-container {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .timeline-container::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      background-color: var(--blue-primary);
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -3px;
+    }
+    
+    .timeline-item {
+      padding: 10px 40px;
+      position: relative;
+      width: 50%;
+      box-sizing: border-box;
+    }
+    
+    .timeline-item:nth-child(odd) {
+      left: 0;
+    }
+    
+    .timeline-item:nth-child(even) {
+      left: 50%;
+    }
+    
+    .timeline-content {
+      padding: 20px 30px;
+      background-color: white;
+      position: relative;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .timeline-date {
+      display: inline-block;
+      background-color: var(--blue-primary);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    /* Estilos dos modais */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 20;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 0.5rem;
+      max-width: 600px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: black;
+    }
+    
+    /* Estilos do quiz */
+    .quiz-question {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    
+    .quiz-option {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .quiz-option:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .quiz-option.selected {
+      background-color: #e6f7ff;
+      border-color: #1890ff;
+    }
+    
+    .quiz-option.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+    }
+    
+    .quiz-option.incorrect {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+    }
+    
+    .quiz-feedback {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    
+    .quiz-feedback.correct {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .quiz-feedback.incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    /* Estilos do caça-palavras */
+    .word-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .word-item {
+      padding: 5px 10px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    
+    .word-item.found {
+      background-color: #d4edda;
+      color: #155724;
+      text-decoration: line-through;
+    }
+    
+    .word-search-grid {
+      display: grid;
+      grid-template-columns: repeat(15, 1fr);
+      gap: 2px;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .word-search-cell {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .word-search-cell.selected {
+      background-color: #e6f7ff;
+      border: 2px solid #1890ff;
+    }
+    
+    .word-search-cell.found {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    /* Estilos do menu de contexto */
+    .context-menu {
+      position: absolute;
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 15;
+    }
+    
+    .context-menu div {
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    
+    .context-menu div:hover {
+      background-color: #f5f5f5;
+    }
+    
+    /* Estilos do placar */
+    .scoreboard {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    
+    .scoreboard div {
+      text-align: center;
+    }
+    
+    .scoreboard p {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header class="bg-blue-900 text-white py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="assets/logo.png" alt="Logo CLDF" class="h-12 mr-4">
+        <h1 class="text-2xl font-bold">Jogo das Comissões Permanentes</h1>
+      </div>
+      <div class="relative">
+        <div class="menu-button flex items-center cursor-pointer" onclick="showMenu()">
+          <span class="mr-2">Menu</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </div>
+        <div id="menu" class="menu hidden">
+          <a href="#home">Início</a>
+          <a href="#commissions">Comissões</a>
+          <a href="#timeline">Linha do Tempo</a>
+          <a href="#about">Sobre</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <section id="home" class="mb-12">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-3xl font-bold text-blue-800 mb-4">Bem-vindo ao Jogo das Comissões Permanentes</h2>
+        <p class="mb-4">Aprenda sobre as comissões permanentes da Câmara Legislativa do Distrito Federal de forma interativa e divertida.</p>
+        <div class="scoreboard bg-blue-800 text-white rounded-lg p-4 mb-6">
+          <div>
+            <h3 class="font-bold">Pontuação</h3>
+            <p id="score">0</p>
+          </div>
+          <div>
+            <h3 class="font-bold">Comissões Descobertas</h3>
+            <p id="discovered">0/7</p>
+          </div>
+          <div>
+            <h3 class="font-bold">Tempo</h3>
+            <p id="timer">00:00</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button onclick="startGame()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Iniciar Jogo
+          </button>
+          <button onclick="showInstructions()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Instruções
+          </button>
+          <button onclick="resetGame()" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+            Reiniciar
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="timeline" class="mb-12">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6">Linha do Tempo</h2>
+      <div class="timeline-container">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">1991</div>
+            <h3 class="font-bold mb-2">Criação da CLDF</h3>
+            <p>A Câmara Legislativa do Distrito Federal foi criada com a promulgação da Lei Orgânica do DF.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">1992</div>
+            <h3 class="font-bold mb-2">Primeiras Comissões</h3>
+            <p>Estabelecimento das primeiras comissões permanentes para análise de projetos de lei.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">2000</div>
+            <h3 class="font-bold mb-2">Reestruturação</h3>
+            <p>Reorganização das comissões para atender às novas demandas legislativas do DF.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">2020</div>
+            <h3 class="font-bold mb-2">Atualidade</h3>
+            <p>As comissões permanentes continuam sendo fundamentais para o processo legislativo do DF.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="commissions" class="mb-12">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6">Comissões Permanentes</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- As cards das comissões serão geradas dinamicamente pelo JavaScript -->
+      </div>
+    </section>
+
+    <section id="game-area" class="mb-12 hidden">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6">Área de Jogo</h2>
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <p class="mb-4">Clique com o botão direito em uma comissão para ver opções de interação.</p>
+        <p class="mb-4">Complete os desafios para descobrir todas as comissões permanentes!</p>
+        <div class="flex justify-center mt-4">
+          <button onclick="startRandomChallenge()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Iniciar Desafio Aleatório
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="mb-12">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6">Sobre</h2>
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <p class="mb-4">Este jogo foi desenvolvido com o objetivo de educar os cidadãos do Distrito Federal sobre as comissões permanentes da Câmara Legislativa.</p>
+        <p class="mb-4">As comissões permanentes são órgãos técnicos criados pelo Regimento Interno da Câmara Legislativa e constituídos de deputados distritais, com a finalidade de discutir e votar as propostas de leis que são apresentadas à Câmara.</p>
+        <p>Através deste jogo, você pode aprender sobre as atribuições de cada comissão de forma interativa e divertida.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-blue-900 text-white py-6">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <p>&copy; 2023 Câmara Legislativa do Distrito Federal</p>
+        </div>
+        <div>
+          <p>Desenvolvido para fins educacionais</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modais -->
+  <div id="instructions-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('instructions-modal')">&times;</span>
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">Instruções do Jogo</h2>
+      <div>
+        <p class="mb-4">Bem-vindo ao Jogo das Comissões Permanentes da CLDF! Aqui estão as instruções para jogar:</p>
+        <ol class="list-decimal pl-6 mb-4">
+          <li class="mb-2">Clique em "Iniciar Jogo" para começar.</li>
+          <li class="mb-2">Explore as comissões permanentes clicando nelas ou usando o botão direito do mouse para ver opções.</li>
+          <li class="mb-2">Complete os quizzes e caça-palavras para descobrir as comissões e ganhar pontos.</li>
+          <li class="mb-2">Descubra todas as comissões para completar o jogo!</li>
+        </ol>
+        <p class="mb-4">Pontuação:</p>
+        <ul class="list-disc pl-6 mb-4">
+          <li class="mb-2">Quiz completo: 100 pontos</li>
+          <li class="mb-2">Caça-palavras completo: 150 pontos</li>
+        </ul>
+        <p>Divirta-se aprendendo sobre as comissões permanentes da CLDF!</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="commission-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('commission-modal')">&times;</span>
+      <div id="commission-modal-content">
+        <!-- Conteúdo da comissão será inserido aqui -->
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('quiz-modal')">&times;</span>
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">Quiz das Comissões</h2>
+      <div id="quiz-container">
+        <!-- Conteúdo do quiz será inserido aqui -->
+      </div>
+    </div>
+  </div>
+
+  <div id="word-search-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('word-search-modal')">&times;</span>
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">Caça-Palavras das Comissões</h2>
+      <div id="word-search-container">
+        <!-- Conteúdo do caça-palavras será inserido aqui -->
+      </div>
+    </div>
+  </div>
+
+  <div id="completion-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('completion-modal')">&times;</span>
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">Parabéns!</h2>
+      <div id="completion-content">
+        <p class="mb-4">Você completou o Jogo das Comissões Permanentes da CLDF!</p>
+        <div class="mb-4">
+          <h3 class="font-bold">Sua pontuação final:</h3>
+          <p id="final-score" class="text-2xl font-bold">0</p>
+        </div>
+        <div class="mb-4">
+          <h3 class="font-bold">Tempo total:</h3>
+          <p id="final-time" class="text-2xl font-bold">00:00</p>
+        </div>
+        <p class="mb-4">Agora você conhece todas as comissões permanentes da CLDF e suas funções!</p>
+        <button onclick="resetGame()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Jogar Novamente
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu de contexto -->
+  <div id="context-menu" class="context-menu hidden">
+    <div onclick="showCommissionInfo()">Ver informações</div>
+    <div onclick="startCommissionQuiz()">Iniciar quiz</div>
+    <div onclick="startWordSearch()">Caça-palavras</div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
+

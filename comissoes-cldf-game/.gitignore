@@ -1,0 +1,31 @@
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de ambiente
+.env
+
+# Diretórios de dependências
+node_modules/
+vendor/
+
+# Arquivos de log
+*.log
+
+# Arquivos temporários
+*.tmp
+*.swp
+*.swo
+
+# Arquivos de build
+dist/
+build/
+
+# Arquivos de IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos pessoais
+*.bak

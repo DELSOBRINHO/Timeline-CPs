@@ -1,0 +1,432 @@
+/* Estilos para o jogo das Comissões Permanentes da CLDF */
+
+:root {
+  /* Paleta de cores oficial da CLDF */
+  --cldf-blue: #004a8f;       /* Azul principal */
+  --cldf-dark-blue: #003366;  /* Azul escuro */
+  --cldf-light-blue: #0077cc; /* Azul claro */
+  --cldf-gold: #c8a45c;       /* Dourado/Amarelo */
+  --cldf-red: #9e1b32;        /* Vermelho */
+  --cldf-gray: #58595b;       /* Cinza */
+  --cldf-light-gray: #f2f2f2; /* Cinza claro */
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--cldf-gray);
+  background-color: var(--cldf-light-gray);
+}
+
+header {
+  background-color: var(--cldf-blue) !important;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--cldf-dark-blue);
+}
+
+a {
+  color: var(--cldf-light-blue);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--cldf-blue);
+  text-decoration: underline;
+}
+
+button, .button {
+  background-color: var(--cldf-blue);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover, .button:hover {
+  background-color: var(--cldf-dark-blue);
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--cldf-dark-blue) !important;
+  color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Timeline styles */
+.timeline-container {
+  position: relative;
+  margin: 2rem 0;
+  padding: 20px 0;
+}
+
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 100%;
+  background-color: var(--cldf-blue);
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.timeline-item:nth-child(odd) {
+  padding-right: 50%;
+  text-align: right;
+}
+
+.timeline-item:nth-child(even) {
+  padding-left: 50%;
+  text-align: left;
+}
+
+.timeline-content {
+  position: relative;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+  margin-right: 2rem;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+  margin-left: 2rem;
+}
+
+.timeline-date {
+  position: absolute;
+  top: 0;
+  background-color: var(--cldf-gold);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.timeline-item:nth-child(odd) .timeline-date {
+  right: -120px;
+}
+
+.timeline-item:nth-child(even) .timeline-date {
+  left: -120px;
+}
+
+/* Commission card styles */
+.commission-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.commission-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.commission-header {
+  background-color: var(--cldf-blue);
+  color: white;
+  padding: 1rem;
+}
+
+.commission-body {
+  padding: 1rem;
+}
+
+.commission-footer {
+  padding: 1rem;
+  background-color: var(--cldf-light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.completed-badge {
+  background-color: var(--cldf-gold);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: auto;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 600px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--cldf-gray);
+}
+
+.close:hover {
+  color: var(--cldf-red);
+}
+
+/* Quiz styles */
+.quiz-container {
+  margin-top: 1.5rem;
+}
+
+.quiz-question {
+  margin-bottom: 1.5rem;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quiz-option {
+  padding: 0.75rem;
+  border: 1px solid var(--cldf-gray);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quiz-option:hover {
+  background-color: var(--cldf-light-gray);
+}
+
+.quiz-option.selected {
+  background-color: var(--cldf-light-blue);
+  color: white;
+  border-color: var(--cldf-light-blue);
+}
+
+.quiz-option.correct {
+  background-color: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}
+
+.quiz-option.incorrect {
+  background-color: var(--cldf-red);
+  color: white;
+  border-color: var(--cldf-red);
+}
+
+.quiz-feedback {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.quiz-feedback.correct {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.quiz-feedback.incorrect {
+  background-color: rgba(158, 27, 50, 0.1);
+  color: var(--cldf-red);
+}
+
+/* Word search styles */
+.word-search-container {
+  margin-top: 1.5rem;
+}
+
+.word-search-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.word-search-cell {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 1px solid var(--cldf-gray);
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.word-search-cell:hover {
+  background-color: var(--cldf-light-gray);
+}
+
+.word-search-cell.selected {
+  background-color: var(--cldf-light-blue);
+  color: white;
+}
+
+.word-search-cell.found {
+  background-color: var(--cldf-gold);
+  color: white;
+}
+
+.word-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.word-item {
+  padding: 0.5rem 1rem;
+  background-color: var(--cldf-light-gray);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.word-item.found {
+  background-color: var(--cldf-gold);
+  color: white;
+  text-decoration: line-through;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .timeline-container::before {
+    left: 2rem;
+  }
+  
+  .timeline-item:nth-child(odd),
+  .timeline-item:nth-child(even) {
+    padding-left: 4rem;
+    padding-right: 0;
+    text-align: left;
+  }
+  
+  .timeline-item:nth-child(odd) .timeline-content,
+  .timeline-item:nth-child(even) .timeline-content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .timeline-item:nth-child(odd) .timeline-date,
+  .timeline-item:nth-child(even) .timeline-date {
+    left: -1rem;
+    right: auto;
+    top: -1.5rem;
+  }
+  
+  .scoreboard {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+/* Context menu */
+.context-menu {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.context-menu div {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.context-menu div:hover {
+  background-color: var(--cldf-light-gray);
+}
+
+/* Botões específicos */
+.bg-blue-500 {
+  background-color: var(--cldf-blue) !important;
+}
+
+.bg-blue-700:hover {
+  background-color: var(--cldf-dark-blue) !important;
+}
+
+.bg-green-500 {
+  background-color: var(--cldf-gold) !important;
+}
+
+.bg-green-700:hover {
+  background-color: #a88a4a !important; /* Versão mais escura do dourado */
+}
+
+.bg-purple-500 {
+  background-color: var(--cldf-red) !important;
+}
+
+.bg-purple-700:hover {
+  background-color: #7a1526 !important; /* Versão mais escura do vermelho */
+}
+
+.bg-blue-800 {
+  background-color: var(--cldf-dark-blue) !important;
+}
+
+.bg-blue-900 {
+  background-color: var(--cldf-blue) !important;
+}
+
+.text-blue-800 {
+  color: var(--cldf-dark-blue) !important;
+}
+
+.text-blue-300 {
+  color: #a8c7e9 !important; /* Versão mais clara do azul */
+}
+
+.hover\:text-blue-300:hover {
+  color: #a8c7e9 !important;
+}

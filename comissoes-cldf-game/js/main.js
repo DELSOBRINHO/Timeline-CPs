@@ -22,7 +22,67 @@ function showMenu() {
   const menu = document.getElementById('menu');
   menu.classList.toggle('hidden');
 }
+// Função para configurar os botões de jogo
+function setupGameButtons() {
+  console.log('Configurando botões de jogo...');
+  
+  // Botão para iniciar o quiz
+  const quizBtn = document.getElementById('start-quiz');
+  if (quizBtn) {
+    console.log('Botão de quiz encontrado, adicionando evento de clique');
+    quizBtn.addEventListener('click', function() {
+      console.log('Botão de quiz clicado');
+      startQuiz();
+    });
+  } else {
+    console.error('Botão de quiz não encontrado no DOM');
+  }
+  
+  // Configurar menu de contexto (botão direito)
+  document.addEventListener('contextmenu', function(e) {
+    // Prevenir o menu de contexto padrão
+    e.preventDefault();
+    
+    console.log('Clique com botão direito detectado');
+    
+    // Verificar se estamos em uma área de jogo
+    if (document.getElementById('game-area').contains(e.target)) {
+      console.log('Clique com botão direito na área de jogo');
+      startQuiz();
+    }
+  });
+}
 
+// Função para iniciar o quiz
+function startQuiz() {
+  console.log('Função startQuiz chamada');
+  
+  // Selecionar uma comissão aleatória que ainda não foi descoberta
+  const undiscoveredCommissions = commissions.filter(c => !c.discovered);
+  
+  if (undiscoveredCommissions.length === 0) {
+    console.log('Todas as comissões já foram descobertas');
+    showMessage('Parabéns! Você já descobriu todas as comissões!');
+    return;
+  }
+  
+  console.log(`${undiscoveredCommissions.length} comissões não descobertas disponíveis`);
+  
+  const randomIndex = Math.floor(Math.random() * undiscoveredCommissions.length);
+  const selectedCommission = undiscoveredCommissions[randomIndex];
+  
+  console.log('Comissão selecionada:', selectedCommission.name);
+  
+  // Selecionar uma pergunta aleatória do quiz da comissão
+  const quizQuestions = selectedCommission.quiz;
+  const questionIndex = Math.floor(Math.random() * quizQuestions.length);
+  const question = quizQuestions[questionIndex];
+  
+  console.log('Pergunta selecionada:', question.question);
+  
+  // Mostrar a pergunta e opções
+  showQuizQuestion(selectedCommission, question);
+}
 // Função para gerar o caça-palavras
 function generateWordSearch(commission) {
   // Palavras relacionadas à comissão
@@ -177,8 +237,7 @@ function checkSelectedCells() {
   });
   
   // Verificar
-# Continuar a criação do arquivo main.js
-cat >> js/main.js << 'EOL'
+
   // Verificar se a palavra está na lista
   if (window.wordSearchWords.includes(word) && !window.wordSearchFound.includes(word)) {
     // Marcar palavra como encontrada

@@ -38,13 +38,12 @@ function startQuiz(commissionId) {
         ${q.options.map((option, i) => `
           <div class="option mb-2">
             <input type="radio" id="q${index}_o${i}" name="q${index}" value="${
-# Continuar a criação do arquivo quiz.js
-cat > js/quiz.js << 'EOL'
+
 // Iniciar quiz
 function startQuiz(commissionId) {
   console.log('Iniciando quiz para comissão ID:', commissionId);
-  const commission = commissions.find(c => c.id === commissionId);
-  
+
+  const commission = commissions.find(c => c.id === commissionId); // O arquivo main.js chama esta função startQuiz() quando o botão "Iniciar Quiz" é clicado  
   if (!commission) {
     console.error('Comissão não encontrada:', commissionId);
     return;

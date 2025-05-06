@@ -5,29 +5,81 @@ let progress = 0;
 let completed = [];
 let activityType = {};
 
-// Inicializar a aplicação quando o DOM estiver carregado
+// Inicialização do jogo
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM carregado, inicializando aplicação...');
+  console.log('Inicializando o jogo...');
   
-  // Configurar listeners
-  document.getElementById('start-journey').addEventListener('click', loadCommissionsData);
-  document.getElementById('file-upload').addEventListener('change', handleFileUpload);
-  document.getElementById('generate-report').addEventListener('click', generateReport);
+  // Inicializar o contador de comissões descobertas
+  updateDiscoveredCounter();
   
-  // Configurar modal
-  const modal = document.getElementById('modal');
-  const closeBtn = document.querySelector('.close');
+  // Configurar menu de navegação
+  setupNavigation();
   
-  closeBtn.addEventListener('click', closeModal);
+  // Configurar eventos para os botões de jogo
+  setupGameButtons();
   
-  window.addEventListener('click', function(event) {
-    if (event.target === modal) {
-      closeModal();
-    }
-  });
-  
-  console.log('Aplicação inicializada com sucesso!');
+  console.log('Jogo inicializado com sucesso!');
 });
+
+// Configurar navegação
+function setupNavigation() {
+  const menuItems = document.querySelectorAll('nav ul li a');
+  
+  menuItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = this.getAttribute('data-target');
+      
+      // Esconder todas as seções
+      document.querySelectorAll('main section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Mostrar a seção alvo
+      const targetSection = document.getElementById(target);
+      if (targetSection) {
+        targetSection.classList.add('active');
+        
+        // Se for a seção de comissões, mostrar o carrossel
+        if (target === 'commissions') {
+          showCommissionsCarousel();
+        }
+      }
+    });
+  });
+}
+
+// Configurar botões de jogo
+function setupGameButtons() {
+  // Botão para iniciar o jogo de caça-palavras
+  const wordSearchBtn = document.getElementById('start-word-search');
+  if (wordSearchBtn) {
+    wordSearchBtn.addEventListener('click', startWordSearchGame);
+  }
+  
+  // Botão para iniciar o quiz
+  const quizBtn = document.getElementById('start-quiz');
+  if (quizBtn) {
+    quizBtn.addEventListener('click', startQuizGame);
+  }
+  
+  // Botão para iniciar o jogo da memória
+  const memoryBtn = document.getElementById('start-memory');
+  if (memoryBtn) {
+    memoryBtn.addEventListener('click', startMemoryGame);
+  }
+}
+
+// Atualiza o contador de comissões descobertas
+function updateDiscoveredCounter() {
+  const discovered = window.commissions.filter(c => c.discovered).length;
+  const total = window.commissions.length;
+  
+  const counterElement = document.getElementById('discovered-counter');
+  if (counterElement) {
+    counterElement.textContent = `${discovered}/${total}`;
+  }
+}
 
 // Carregar dados das comissões
 function loadCommissionsData() {
